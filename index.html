@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#10152f" />
+<title>A Little Letter for You</title>
+<style>
+  :root { --night:#10152f; --lav:#a99bff; --pink:#ff8fbd; --mint:#9ff3d4; --cream:#fff3cf; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; min-height:100%; background:var(--night); color:#fff; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+  body { min-height:100svh; display:grid; place-items:center; overflow:hidden; }
+  .scene { width:min(100vw,900px); height:min(100svh,650px); min-height:480px; position:relative; overflow:hidden;
+    background:linear-gradient(180deg,#151a3d 0%,#28295a 58%,#554078 100%); image-rendering:pixelated; border:4px solid #7771bc; }
+  .stars { position:absolute; inset:0; opacity:.8; background-image:
+    radial-gradient(circle,#fff3cf 1.5px,transparent 2px),radial-gradient(circle,#a99bff 1.5px,transparent 2px);
+    background-size:83px 71px,119px 103px; background-position:11px 9px,44px 28px; }
+  .moon { position:absolute; top:9%; right:13%; width:68px;height:68px;background:#fff0bd;box-shadow:0 0 0 8px #fff0bd22,0 0 30px #fff0bd55; border-radius:50%; }
+  .moon:after { content:""; position:absolute; width:60px;height:60px;right:20px;top:-8px;background:#171b40;border-radius:50%; }
+  .cloud { position:absolute; width:90px;height:20px;background:#7772b5; opacity:.7; box-shadow:15px -12px 0 -2px #7772b5,35px -5px 0 4px #7772b5; }
+  .cloud.one { top:28%;left:8%; animation:drift 12s linear infinite; }
+  .cloud.two { top:43%;right:12%;transform:scale(.7);animation:drift 16s linear infinite reverse; }
+  @keyframes drift { from{translate:-30px 0} to{translate:35px 0} }
+  .ground { position:absolute;bottom:0;left:0;right:0;height:24%;background:#27234e;border-top:6px solid #7771bc; }
+  .ground:before { content:"";position:absolute;top:14px;left:0;right:0;height:7px;background:repeating-linear-gradient(90deg,#514577 0 24px,transparent 24px 43px); }
+  .intro { position:absolute;top:7%;left:5%;right:5%;text-align:center;z-index:5; }
+  .eyebrow { color:var(--mint);font-size:clamp(10px,2vw,13px);letter-spacing:3px;text-transform:uppercase; }
+  h1 { margin:10px 0 5px;font-size:clamp(18px,4vw,30px);line-height:1.35;color:var(--cream);text-shadow:4px 4px 0 #5d4d90; }
+  .sub { color:#d8d5ff;font-size:clamp(10px,2vw,13px); }
+  .pigeon-wrap { position:absolute;left:-180px;top:40%;width:130px;height:100px;z-index:4; animation:fly 4.3s cubic-bezier(.22,.7,.25,1) forwards; animation-delay:.7s; }
+  @keyframes fly { 0%{left:-180px;top:42%;transform:rotate(-7deg)} 55%{left:42%;top:30%;transform:rotate(3deg)} 100%{left:49%;top:43%;transform:rotate(0)} }
+  .pixel { image-rendering:pixelated; shape-rendering:crispEdges; }
+  .wing { transform-origin:50% 50%; animation:flap .22s steps(2) infinite alternate; }
+  @keyframes flap { from{transform:rotate(-18deg)} to{transform:rotate(22deg)} }
+  .letter { position:absolute;right:7%;top:42%;width:58px;height:43px;background:var(--cream);border:4px solid #cf9f77;box-shadow:5px 5px 0 #30254c;transform:rotate(8deg);animation:letterDrop 1s ease-in 3.8s forwards;z-index:3; }
+  .letter:before { content:"";position:absolute;left:6px;right:6px;top:8px;height:3px;background:#e3bca0;box-shadow:0 8px 0 #e3bca0,0 16px 0 #e3bca0; }
+  @keyframes letterDrop { to{top:57%;right:23%;transform:rotate(-8deg) scale(.9)} }
+  .friend { position:absolute;right:15%;bottom:17%;width:110px;height:160px;z-index:2; }
+  .speech { position:absolute;right:8%;bottom:48%;padding:10px 12px;background:#fff3cf;color:#33284e;border:4px solid #33284e;font-size:11px;opacity:0;transform:translateY(8px);z-index:6; }
+  .speech:after { content:"";position:absolute;bottom:-12px;right:22px;border-width:8px 8px 0;border-style:solid;border-color:#fff3cf transparent transparent; }
+  .speech.show { animation:pop .5s steps(3) forwards; }
+  @keyframes pop { to{opacity:1;transform:translateY(0)} }
+  .big-letter { position:absolute;left:50%;top:52%;transform:translate(-50%,-50%) scale(.1);width:min(78%,420px);padding:28px 16px 32px;background:#fff3cf;color:#30254c;border:6px solid #d9a77e;box-shadow:10px 10px 0 #17142f;z-index:10;text-align:center;opacity:0; }
+  .big-letter .stamp { color:#b45b91;font-size:12px;letter-spacing:2px; }
+  .big-letter .hi { display:block;margin-top:15px;font-size:clamp(42px,12vw,82px);font-weight:1000;letter-spacing:5px;color:#e65c9a;text-shadow:4px 4px 0 #a99bff,8px 8px 0 #30254c; }
+  .big-letter p { font-size:11px;line-height:1.8;color:#63547b; }
+  .big-letter.open { animation:openLetter .9s cubic-bezier(.2,.9,.2,1.2) forwards; }
+  @keyframes openLetter { 0%{opacity:0;transform:translate(-50%,-35%) scale(.1) rotate(-8deg)} 70%{opacity:1;transform:translate(-50%,-52%) scale(1.04) rotate(2deg)} 100%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0)} }
+  .friend.bounce { animation:bounce .55s steps(3) 2; }
+  @keyframes bounce { 50%{translate:0 -10px} }
+  .btn { position:absolute;bottom:4%;left:50%;transform:translateX(-50%);z-index:20;background:var(--mint);color:#19213f;border:0;padding:12px 18px;font:700 12px ui-monospace,monospace;box-shadow:4px 4px 0 #11152e;cursor:pointer; }
+  .btn:active { transform:translate(calc(-50% + 3px),3px);box-shadow:1px 1px 0 #11152e; }
+  .hint { position:absolute;bottom:1%;left:0;right:0;text-align:center;color:#d8d5ff;font-size:9px;z-index:4;opacity:.7;pointer-events:none; }
+  .hidden { display:none; }
+  @media(max-width:500px) { .friend{right:9%;transform:scale(.82);transform-origin:bottom right}.letter{right:8%}.pigeon-wrap{scale:.8}.scene{min-height:520px} }
+  @media(prefers-reduced-motion:reduce) { *,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important} }
+</style>
+</head>
+<body>
+<main class="scene" aria-label="A pixel-art pigeon delivers a letter that opens to say Hi">
+  <div class="stars"></div><div class="moon"></div><div class="cloud one"></div><div class="cloud two"></div>
+  <header class="intro">
+    <div class="eyebrow">✦ a tiny message from afar ✦</div>
+    <h1>Special delivery!</h1>
+    <div class="sub">Someone sent you a little something...</div>
+  </header>
+
+  <div class="pigeon-wrap" id="pigeon">
+    <svg class="pixel" viewBox="0 0 128 100" width="130" height="100" aria-hidden="true">
+      <!-- tail -->
+      <rect x="8" y="45" width="12" height="12" fill="#d9e5f4"/><rect x="0" y="37" width="12" height="12" fill="#d9e5f4"/>
+      <!-- body -->
+      <rect x="20" y="40" width="52" height="28" fill="#d9e5f4"/><rect x="28" y="32" width="36" height="12" fill="#d9e5f4"/>
+      <rect x="36" y="44" width="28" height="20" fill="#9eafd2"/>
+      <!-- head -->
+      <rect x="58" y="16" width="28" height="28" fill="#d9e5f4"/><rect x="66" y="8" width="16" height="12" fill="#d9e5f4"/>
+      <rect x="78" y="24" width="8" height="8" fill="#ffbf86"/><rect x="86" y="27" width="10" height="5" fill="#ffbf86"/>
+      <rect x="76" y="20" width="5" height="5" fill="#253052"/><rect x="77" y="20" width="2" height="2" fill="#fff"/>
+      <rect x="54" y="36" width="8" height="8" fill="#a99bff"/>
+      <g class="wing"><rect x="30" y="28" width="28" height="12" fill="#b7c7e7"/><rect x="22" y="36" width="28" height="12" fill="#b7c7e7"/><rect x="34" y="44" width="20" height="8" fill="#b7c7e7"/></g>
+      <!-- feet -->
+      <rect x="40" y="68" width="5" height="12" fill="#ffbf86"/><rect x="56" y="68" width="5" height="12" fill="#ffbf86"/>
+      <!-- envelope -->
+      <rect x="88" y="48" width="28" height="22" fill="#fff3cf" stroke="#cf9f77" stroke-width="3"/>
+      <path d="M90 51 L102 61 L114 51" fill="none" stroke="#e5b58f" stroke-width="3"/>
+      <rect x="99" y="57" width="6" height="5" fill="#ff8fbd"/>
+    </svg>
+  </div>
+
+  <div class="letter" id="smallLetter" aria-hidden="true"></div>
+
+  <!-- Pixel-art friend -->
+  <svg class="friend pixel" id="friend" viewBox="0 0 110 160" aria-label="Your friend waiting for the letter">
+    <rect x="32" y="5" width="44" height="40" fill="#5b3a35"/>
+    <rect x="28" y="13" width="52" height="34" fill="#e9b28f"/>
+    <rect x="24" y="10" width="12" height="28" fill="#5b3a35"/><rect x="72" y="10" width="12" height="28" fill="#5b3a35"/>
+    <rect x="38" y="27" width="7" height="5" fill="#30254c"/><rect x="62" y="27" width="7" height="5" fill="#30254c"/>
+    <rect x="47" y="37" width="16" height="4" fill="#b45b73"/>
+    <rect x="25" y="48" width="60" height="50" fill="#a99bff"/><rect x="33" y="48" width="44" height="10" fill="#c3b8ff"/>
+    <rect x="16" y="54" width="12" height="35" fill="#e9b28f"/><rect x="82" y="54" width="12" height="35" fill="#e9b28f"/>
+    <rect x="33" y="98" width="18" height="42" fill="#26345c"/><rect x="59" y="98" width="18" height="42" fill="#26345c"/>
+    <rect x="25" y="140" width="28" height="12" fill="#ff8fbd"/><rect x="57" y="140" width="28" height="12" fill="#ff8fbd"/>
+    <rect x="16" y="82" width="14" height="10" fill="#e9b28f"/><rect x="80" y="82" width="14" height="10" fill="#e9b28f"/>
+  </svg>
+
+  <div class="speech" id="speech">For me?! ✉</div>
+  <section class="big-letter" id="bigLetter" aria-live="polite">
+    <div class="stamp">✦ OPEN WHEN YOU SMILE ✦</div>
+    <span class="hi">HI!</span>
+    <p>Just a tiny pixel-sized hello<br/>from your favourite human. ♡</p>
+    <div class="stamp">END OF TRANSMISSION • 001</div>
+  </section>
+  <div class="ground"></div>
+  <button class="btn" id="replay">↻ PLAY AGAIN</button>
+  <div class="hint">BEST EXPERIENCED WITH SOUND OFF · MADE JUST FOR YOU</div>
+</main>
+<script>
+  const pigeon = document.getElementById('pigeon');
+  const smallLetter = document.getElementById('smallLetter');
+  const friend = document.getElementById('friend');
+  const speech = document.getElementById('speech');
+  const bigLetter = document.getElementById('bigLetter');
+  const replay = document.getElementById('replay');
+  let timers = [];
+  function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+  function play() {
+    timers.forEach(clearTimeout); timers = [];
+    pigeon.style.animation = 'none'; smallLetter.style.animation = 'none';
+    friend.classList.remove('bounce'); speech.classList.remove('show');
+    bigLetter.classList.remove('open'); bigLetter.style.display = 'none';
+    smallLetter.style.display = 'block'; pigeon.style.display = 'block';
+    void pigeon.offsetWidth;
+    pigeon.style.animation = 'fly 4.3s cubic-bezier(.22,.7,.25,1) forwards';
+    pigeon.style.animationDelay = '.7s';
+    smallLetter.style.animation = 'letterDrop 1s ease-in 3.8s forwards';
+    later(() => { speech.classList.add('show'); friend.classList.add('bounce'); }, 4200);
+    later(() => {
+      smallLetter.style.display = 'none';
+      bigLetter.style.display = 'block';
+      void bigLetter.offsetWidth;
+      bigLetter.classList.add('open');
+    }, 5700);
+    later(() => { pigeon.style.display = 'none'; }, 4500);
+  }
+  replay.addEventListener('click', play);
+  play();
+</script>
+</body>
+</html>
